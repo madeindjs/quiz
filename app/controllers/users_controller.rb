@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :check_owner, only: [:edit, :update, :destroy]
 
   # GET /users
   # GET /users.json
@@ -70,6 +71,9 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:email, :password)
+    end
 
+    def check_owner
+      redirect_to new_user_session_path unless  can? :modify, @user
     end
 end

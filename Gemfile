@@ -71,3 +71,5 @@ end
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 gem 'authlogic', '~> 5.0', '>= 5.0.1'
+
+gem "cancancan", "~> 3.0"
