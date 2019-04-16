@@ -24,6 +24,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not create user twice" do
+    login @user
     assert_no_difference('User.count') do
       post users_url, params: { user: { email: @user.email } }
     end
@@ -39,20 +40,44 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "should show user" do
     get user_url(@user)
+
     assert_response :success
   end
 
   test "should get edit" do
+    login @user
+
     get edit_user_url(@user)
     assert_response :success
   end
 
   test "should update user" do
+    login @user
+
+    patch user_url(@user), params: { user: { email: @user.email } }
+    assert_redirected_to user_url(@user)
+  end
+
+  test "should update user for amin" do
+    login users(:super_admin)
+
     patch user_url(@user), params: { user: { email: @user.email } }
     assert_redirected_to user_url(@user)
   end
 
   test "should destroy user" do
+    login @user
+
+    assert_difference('User.count', -1) do
+      delete user_url(@user)
+    end
+
+    assert_redirected_to users_url
+  end
+
+  test "should destroy user for admin" do
+    login users(:super_admin)
+
     assert_difference('User.count', -1) do
       delete user_url(@user)
     end
